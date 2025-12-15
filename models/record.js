@@ -5,7 +5,6 @@ const Record = sequelize.define('Record', {
   diagnosis: { type: DataTypes.STRING },
   treatment: { type: DataTypes.STRING },
   visit_date: { type: DataTypes.STRING }
-  // Foreign Key patient_id & doctor_id akan otomatis dibuat saat relasi di index.js
 });
 
 module.exports = Record;
