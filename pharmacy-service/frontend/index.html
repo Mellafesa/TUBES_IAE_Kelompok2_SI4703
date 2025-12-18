@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pharmacy Service - Medihub</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>💊 Pharmacy Service - Medihub</h1>
+            <p>Manajemen Obat & Resep</p>
+        </header>
+
+        <div class="main-content">
+            <div class="section-header">
+                <h2>Data Obat</h2>
+                <button class="btn btn-primary" onclick="showMedicineForm()">+ Tambah Obat</button>
+            </div>
+            <div id="medicines-list" class="data-list"></div>
+        </div>
+    </div>
+
+    <!-- Modal Form -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+
+    <div id="loading" class="loading hidden">Loading...</div>
+    <div id="message" class="message hidden"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
+
