@@ -1,0 +1,27 @@
+{
+  "name": "pharmacy-service",
+  "version": "1.0.0",
+  "description": "Microservice untuk Farmasi menggunakan Express GraphQL",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "db:create": "npx sequelize-cli db:create",
+    "db:migrate": "npx sequelize-cli db:migrate",
+    "db:undo": "npx sequelize-cli db:migrate:undo"
+  },
+  "dependencies": {
+    "@graphql-tools/schema": "^10.0.3",
+    "axios": "^1.13.2",
+    "cors": "^2.8.5",
+    "express": "^4.18.3",
+    "express-graphql": "^0.12.0",
+    "graphql": "^15.8.0",
+    "mysql2": "^3.9.2",
+    "sequelize": "^6.37.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0",
+    "sequelize-cli": "^6.6.2"
+  }
+}

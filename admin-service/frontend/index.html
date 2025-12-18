@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Service - Medihub</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏥 Admin Service - Medihub</h1>
+            <p>Manajemen Pasien, Dokter, Rekam Medis & Janji Temu</p>
+        </header>
+
+        <nav class="tabs">
+            <button class="tab-btn active" data-tab="patients">Pasien</button>
+            <button class="tab-btn" data-tab="doctors">Dokter</button>
+            <button class="tab-btn" data-tab="records">Rekam Medis</button>
+            <button class="tab-btn" data-tab="appointments">Janji Temu</button>
+        </nav>
+
+        <!-- Patients Tab -->
+        <div id="patients" class="tab-content active">
+            <div class="section-header">
+                <h2>Data Pasien</h2>
+                <button class="btn btn-primary" onclick="showPatientForm()">+ Tambah Pasien</button>
+            </div>
+            <div id="patients-list" class="data-list"></div>
+        </div>
+
+        <!-- Doctors Tab -->
+        <div id="doctors" class="tab-content">
+            <div class="section-header">
+                <h2>Data Dokter</h2>
+                <button class="btn btn-primary" onclick="showDoctorForm()">+ Tambah Dokter</button>
+            </div>
+            <div id="doctors-list" class="data-list"></div>
+        </div>
+
+        <!-- Records Tab -->
+        <div id="records" class="tab-content">
+            <div class="section-header">
+                <h2>Rekam Medis</h2>
+                <button class="btn btn-primary" onclick="showRecordForm()">+ Tambah Rekam Medis</button>
+            </div>
+            <div id="records-list" class="data-list"></div>
+        </div>
+
+        <!-- Appointments Tab -->
+        <div id="appointments" class="tab-content">
+            <div class="section-header">
+                <h2>Janji Temu</h2>
+                <button class="btn btn-primary" onclick="showAppointmentForm()">+ Buat Janji Temu</button>
+            </div>
+            <div id="appointments-list" class="data-list"></div>
+        </div>
+    </div>
+
+    <!-- Modal Forms -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+
+    <div id="loading" class="loading hidden">Loading...</div>
+    <div id="message" class="message hidden"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
+
