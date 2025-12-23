@@ -42,6 +42,15 @@ const typeDefs = `#graphql
     status: String
   }
 
+  # =====================
+  # ⬇️ DATA DARI PHARMACY
+  # =====================
+  type Medicine {
+    id: ID!
+    name: String!
+    stock: Int!
+  }
+
   type Query {
     # Patient Queries
     patients: [Patient]
@@ -58,8 +67,11 @@ const typeDefs = `#graphql
     # Appointment Queries
     appointments: [Appointment]
     appointment(id: ID!): Appointment
-  }
 
+    # ⬇️ KOMUNIKASI ANTAR SERVICE
+    medicinesFromPharmacy: [Medicine]
+  }
+  
   type Mutation {
     # Patient Mutations
     createPatient(name: String!, age: Int, gender: String, address: String, phone: String, disease: String): Patient
