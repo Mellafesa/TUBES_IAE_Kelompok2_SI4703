@@ -3,8 +3,6 @@ const { Patient, Doctor, Record, Appointment } = db;
 
 const resolvers = {
   Query: {
-    // Bagian Query sudah BENAR & AMAN ✅
-    // Karena kamu sudah pakai "include", datanya pasti lengkap.
     patients: async () => await Patient.findAll({ 
       include: [
         { model: Record, as: 'records' }, 
@@ -53,7 +51,6 @@ const resolvers = {
   },
   
   Mutation: {
-    // Patient & Doctor Mutations (Aman, karena biasanya Pasien baru belum punya Record)
     createPatient: async (_, args) => {
       return await Patient.create(args);
     },
@@ -67,8 +64,12 @@ const resolvers = {
       });
     },
     deletePatient: async (_, { id }) => {
+      await Appointment.destroy({ where: { patient_id: id } });
+      await Record.destroy({ where: { patient_id: id } });
+      
       const deleted = await Patient.destroy({ where: { id } });
-      return deleted ? "Patient berhasil dihapus" : "Gagal: ID tidak ditemukan";
+      
+      return deleted ? "Patient dan data terkait berhasil dihapus" : "Gagal: ID tidak ditemukan";
     },
     
     createDoctor: async (_, args) => {
@@ -85,13 +86,10 @@ const resolvers = {
       return deleted ? "Doctor berhasil dihapus" : "Gagal: ID tidak ditemukan";
     },
     
-    // 🔥 PERBAIKAN UTAMA ADA DI SINI (RECORD & APPOINTMENT) 🔥
     
     createRecord: async (_, args) => {
-      // 1. Buat dulu datanya
       const newRecord = await Record.create(args);
       
-      // 2. Ambil ulang datanya lengkap dengan relasi Patient & Doctor
       return await Record.findByPk(newRecord.id, {
         include: [
           { model: Patient, as: 'patient' }, 
@@ -114,15 +112,12 @@ const resolvers = {
       return deleted ? "Record berhasil dihapus" : "Gagal: ID tidak ditemukan";
     },
     
-    // 🔥 PERBAIKAN APPOINTMENT JUGA 🔥
     createAppointment: async (_, args) => {
-      // 1. Buat dulu
       const newAppt = await Appointment.create({
         ...args,
         status: args.status || 'Scheduled'
       });
       
-      // 2. Ambil ulang lengkap dengan relasi
       return await Appointment.findByPk(newAppt.id, {
         include: [
           { model: Patient, as: 'patient' }, 
