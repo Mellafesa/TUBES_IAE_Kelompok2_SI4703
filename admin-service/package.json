@@ -20,7 +20,9 @@
     "graphql-request": "^7.4.0",
     "jsonwebtoken": "^9.0.3",
     "mysql2": "^3.9.2",
-    "sequelize": "^6.37.1"
+    "sequelize": "^6.37.1",
+    "dotenv": "^16.4.5",
+    "wait-on": "^7.2.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.0",

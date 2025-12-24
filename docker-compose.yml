@@ -1,0 +1,64 @@
+version: "3.8"
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: tugas_medihub
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - app-network
+
+  admin-service:
+    build:
+      context: ./admin-service
+      dockerfile: Dockerfile
+    container_name: admin-service
+    ports:
+      - "4003:4003"
+    environment:
+      - PORT=4003
+      - DB_USERNAME=root
+      - DB_PASSWORD=root
+      - DB_DATABASE=tugas_medihub
+      - DB_HOST=mysql
+      - DB_DIALECT=mysql
+      - PHARMACY_SERVICE_URL=http://pharmacy-service:4004/graphql
+    depends_on:
+      - mysql
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  pharmacy-service:
+    build:
+      context: ./pharmacy-service
+      dockerfile: Dockerfile
+    container_name: pharmacy-service
+    ports:
+      - "4004:4004"
+    environment:
+      - PORT=4004
+      - DB_USERNAME=root
+      - DB_PASSWORD=root
+      - DB_DATABASE=tugas_medihub
+      - DB_HOST=mysql
+      - DB_DIALECT=mysql
+      - ADMIN_SERVICE_URL=http://admin-service:4003/graphql
+    depends_on:
+      - mysql
+    networks:
+      - app-network
+    restart: unless-stopped
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  db_data:
