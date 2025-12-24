@@ -3,7 +3,8 @@ const { Patient, Doctor, Record, Appointment } = db;
 
 const resolvers = {
   Query: {
-    // Patient Queries
+    // Bagian Query sudah BENAR & AMAN ✅
+    // Karena kamu sudah pakai "include", datanya pasti lengkap.
     patients: async () => await Patient.findAll({ 
       include: [
         { model: Record, as: 'records' }, 
@@ -17,7 +18,6 @@ const resolvers = {
       ] 
     }),
     
-    // Doctor Queries
     doctors: async () => await Doctor.findAll({ 
       include: [{ model: Appointment, as: 'appointments' }] 
     }),
@@ -25,7 +25,6 @@ const resolvers = {
       include: [{ model: Appointment, as: 'appointments' }] 
     }),
     
-    // Record Queries
     records: async () => await Record.findAll({ 
       include: [
         { model: Patient, as: 'patient' }, 
@@ -39,7 +38,6 @@ const resolvers = {
       ] 
     }),
     
-    // Appointment Queries
     appointments: async () => await Appointment.findAll({ 
       include: [
         { model: Patient, as: 'patient' }, 
@@ -55,7 +53,7 @@ const resolvers = {
   },
   
   Mutation: {
-    // Patient Mutations
+    // Patient & Doctor Mutations (Aman, karena biasanya Pasien baru belum punya Record)
     createPatient: async (_, args) => {
       return await Patient.create(args);
     },
@@ -73,7 +71,6 @@ const resolvers = {
       return deleted ? "Patient berhasil dihapus" : "Gagal: ID tidak ditemukan";
     },
     
-    // Doctor Mutations
     createDoctor: async (_, args) => {
       return await Doctor.create(args);
     },
@@ -88,10 +85,21 @@ const resolvers = {
       return deleted ? "Doctor berhasil dihapus" : "Gagal: ID tidak ditemukan";
     },
     
-    // Record Mutations
+    // 🔥 PERBAIKAN UTAMA ADA DI SINI (RECORD & APPOINTMENT) 🔥
+    
     createRecord: async (_, args) => {
-      return await Record.create(args);
+      // 1. Buat dulu datanya
+      const newRecord = await Record.create(args);
+      
+      // 2. Ambil ulang datanya lengkap dengan relasi Patient & Doctor
+      return await Record.findByPk(newRecord.id, {
+        include: [
+          { model: Patient, as: 'patient' }, 
+          { model: Doctor, as: 'doctor' }
+        ]
+      });
     },
+
     updateRecord: async (_, { id, ...args }) => {
       await Record.update(args, { where: { id } });
       return await Record.findByPk(id, {
@@ -106,13 +114,23 @@ const resolvers = {
       return deleted ? "Record berhasil dihapus" : "Gagal: ID tidak ditemukan";
     },
     
-    // Appointment Mutations
+    // 🔥 PERBAIKAN APPOINTMENT JUGA 🔥
     createAppointment: async (_, args) => {
-      return await Appointment.create({
+      // 1. Buat dulu
+      const newAppt = await Appointment.create({
         ...args,
         status: args.status || 'Scheduled'
       });
+      
+      // 2. Ambil ulang lengkap dengan relasi
+      return await Appointment.findByPk(newAppt.id, {
+        include: [
+          { model: Patient, as: 'patient' }, 
+          { model: Doctor, as: 'doctor' }
+        ]
+      });
     },
+
     updateAppointment: async (_, { id, ...args }) => {
       await Appointment.update(args, { where: { id } });
       return await Appointment.findByPk(id, {
